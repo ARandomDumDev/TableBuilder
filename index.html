@@ -37,39 +37,37 @@
 
         #table-preview {
             margin: 20px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease-in-out;
+            position: relative;
+            display: inline-block;
         }
 
         .table-top {
-            width: 200px;
-            height: 100px;
             background: brown;
-            border-radius: 0;
             transition: all 0.3s;
+            position: relative;
         }
 
         .legs {
-            width: 80%;
-            height: 60px;
+            position: absolute;
+            width: 100%;
             display: flex;
             justify-content: space-between;
+            bottom: -60px;
         }
 
         .leg {
-            width: 10px;
             height: 60px;
             background: brown;
         }
 
-        .fancy-leg {
-            width: 15px;
-            height: 60px;
-            background: brown;
+        #save-button {
+            margin-top: 20px;
+            padding: 10px 15px;
+            background: #ffcc00;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -116,6 +114,8 @@
                 <div class="leg"></div>
             </div>
         </div>
+
+        <button id="save-button" onclick="saveTableAsImage()">Save as Image</button>
     </div>
 
     <script>
@@ -130,55 +130,55 @@
             let tableTop = document.getElementById("table-top");
             let tableLegs = document.getElementById("table-legs");
 
-            // Shape
-            if (shape === "circle") {
-                tableTop.style.borderRadius = "50%";
-            } else {
-                tableTop.style.borderRadius = "0";
-            }
+            tableTop.style.width = width;
+            tableTop.style.height = height;
+            tableTop.style.borderRadius = shape === "circle" ? "50%" : "0";
 
-            // Material
             if (material === "wood") {
-                tableTop.style.background = "#8B4513"; // Brown
+                tableTop.style.background = "#8B4513";
             } else if (material === "metal") {
-                tableTop.style.background = "#A9A9A9"; // Gray
+                tableTop.style.background = "#A9A9A9";
             } else if (material === "glass") {
-                tableTop.style.background = "rgba(173, 216, 230, 0.6)"; // Transparent blue
+                tableTop.style.background = "rgba(173, 216, 230, 0.6)";
             } else if (material === "pizza") {
                 tableTop.style.background = "url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Supreme_pizza.jpg')";
                 tableTop.style.backgroundSize = "cover";
             }
 
-            // Color
             tableTop.style.backgroundColor = color;
 
-            // Size
-            tableTop.style.width = width;
-            tableTop.style.height = height;
-
-            // Leg Style
             if (legStyle === "none") {
                 tableLegs.style.display = "none";
             } else {
                 tableLegs.style.display = "flex";
                 let legs = tableLegs.children;
                 for (let i = 0; i < legs.length; i++) {
-                    if (legStyle === "thin") {
-                        legs[i].style.width = "10px";
-                        legs[i].style.borderRadius = "0";
-                    } else if (legStyle === "thick") {
-                        legs[i].style.width = "20px";
-                        legs[i].style.borderRadius = "0";
-                    } else if (legStyle === "fancy") {
-                        legs[i].style.width = "15px";
-                        legs[i].style.borderRadius = "5px";
-                    }
+                    legs[i].style.width = legStyle === "thin" ? "10px" :
+                                         legStyle === "thick" ? "20px" :
+                                         "15px";
+                    legs[i].style.borderRadius = legStyle === "fancy" ? "5px" : "0";
+                    legs[i].style.background = color;
                 }
             }
+
+            tableLegs.style.width = width;
+        }
+
+        function saveTableAsImage() {
+            let tablePreview = document.getElementById("table-preview");
+
+            html2canvas(tablePreview).then(canvas => {
+                let link = document.createElement("a");
+                link.download = "My_Cursed_Table.png";
+                link.href = canvas.toDataURL();
+                link.click();
+            });
         }
 
         updateTable();
     </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 </body>
 </html>
