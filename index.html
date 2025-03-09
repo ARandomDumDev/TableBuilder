@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Table Builder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #3a3a5f, #1e1e2f);
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        label, select, input {
+            margin: 10px 0;
+            display: block;
+            font-size: 16px;
+        }
+
+        select, input {
+            padding: 8px;
+            width: 100%;
+            border-radius: 5px;
+            border: none;
+        }
+
+        #table-preview {
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .table-top {
+            width: 200px;
+            height: 100px;
+            background: brown;
+            border-radius: 0;
+            transition: all 0.3s;
+        }
+
+        .legs {
+            width: 80%;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .leg {
+            width: 10px;
+            height: 60px;
+            background: brown;
+        }
+
+        .fancy-leg {
+            width: 15px;
+            height: 60px;
+            background: brown;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Table Builder</h1>
+
+        <label>Shape:</label>
+        <select id="shape" onchange="updateTable()">
+            <option value="rectangle">Rectangle</option>
+            <option value="circle">Circle</option>
+        </select>
+
+        <label>Leg Style:</label>
+        <select id="legStyle" onchange="updateTable()">
+            <option value="thin">Thin</option>
+            <option value="thick">Thick</option>
+            <option value="fancy">Fancy</option>
+            <option value="none">No Legs</option>
+        </select>
+
+        <label>Material:</label>
+        <select id="material" onchange="updateTable()">
+            <option value="wood">Wood</option>
+            <option value="metal">Metal</option>
+            <option value="glass">Glass</option>
+            <option value="pizza">Pizza</option>
+        </select>
+
+        <label>Color:</label>
+        <input type="color" id="color" value="#8B4513" onchange="updateTable()">
+
+        <label>Width (px):</label>
+        <input type="range" id="width" min="100" max="400" value="200" oninput="updateTable()">
+
+        <label>Height (px):</label>
+        <input type="range" id="height" min="50" max="200" value="100" oninput="updateTable()">
+
+        <div id="table-preview">
+            <div id="table-top" class="table-top"></div>
+            <div id="table-legs" class="legs">
+                <div class="leg"></div>
+                <div class="leg"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function updateTable() {
+            let shape = document.getElementById("shape").value;
+            let legStyle = document.getElementById("legStyle").value;
+            let material = document.getElementById("material").value;
+            let color = document.getElementById("color").value;
+            let width = document.getElementById("width").value + "px";
+            let height = document.getElementById("height").value + "px";
+
+            let tableTop = document.getElementById("table-top");
+            let tableLegs = document.getElementById("table-legs");
+
+            // Shape
+            if (shape === "circle") {
+                tableTop.style.borderRadius = "50%";
+            } else {
+                tableTop.style.borderRadius = "0";
+            }
+
+            // Material
+            if (material === "wood") {
+                tableTop.style.background = "#8B4513"; // Brown
+            } else if (material === "metal") {
+                tableTop.style.background = "#A9A9A9"; // Gray
+            } else if (material === "glass") {
+                tableTop.style.background = "rgba(173, 216, 230, 0.6)"; // Transparent blue
+            } else if (material === "pizza") {
+                tableTop.style.background = "url('https://upload.wikimedia.org/wikipedia/commons/d/d3/Supreme_pizza.jpg')";
+                tableTop.style.backgroundSize = "cover";
+            }
+
+            // Color
+            tableTop.style.backgroundColor = color;
+
+            // Size
+            tableTop.style.width = width;
+            tableTop.style.height = height;
+
+            // Leg Style
+            if (legStyle === "none") {
+                tableLegs.style.display = "none";
+            } else {
+                tableLegs.style.display = "flex";
+                let legs = tableLegs.children;
+                for (let i = 0; i < legs.length; i++) {
+                    if (legStyle === "thin") {
+                        legs[i].style.width = "10px";
+                        legs[i].style.borderRadius = "0";
+                    } else if (legStyle === "thick") {
+                        legs[i].style.width = "20px";
+                        legs[i].style.borderRadius = "0";
+                    } else if (legStyle === "fancy") {
+                        legs[i].style.width = "15px";
+                        legs[i].style.borderRadius = "5px";
+                    }
+                }
+            }
+        }
+
+        updateTable();
+    </script>
+
+</body>
+</html>
